@@ -29,10 +29,10 @@ import com.vouncherstudios.strawberry.minecraft.plugin.extension.PaperExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.paper.PaperDescriptionGenerator;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.velocity.VelocityDescriptionGenerator;
+import com.vouncherstudios.strawberry.utils.StringUtils;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import org.gradle.api.provider.Property;
 
 /** The implemented generators type. */
 public enum DescriptionGeneratorType {
@@ -45,7 +45,7 @@ public enum DescriptionGeneratorType {
     @Override
     public boolean isAvailable(@Nonnull StrawberryExtension extension) {
       PaperExtension paper = extension.minecraft().plugin().paper();
-      return isNotEmpty(paper.name()) && isNotEmpty(paper.main());
+      return StringUtils.isNotEmpty(paper.name()) && StringUtils.isNotEmpty(paper.main());
     }
   },
   VELOCITY {
@@ -57,7 +57,9 @@ public enum DescriptionGeneratorType {
     @Override
     public boolean isAvailable(@Nonnull StrawberryExtension extension) {
       VelocityExtension velocity = extension.minecraft().plugin().velocity();
-      return isNotEmpty(velocity.main()) && isNotEmpty(velocity.id());
+      return StringUtils.isNotEmpty(velocity.main())
+          && StringUtils.isNotEmpty(velocity.id())
+          && StringUtils.isNotEmpty(velocity.name());
     }
   };
 
@@ -81,9 +83,5 @@ public enum DescriptionGeneratorType {
       }
     }
     return types;
-  }
-
-  private static boolean isNotEmpty(@Nonnull Property<String> prop) {
-    return prop.isPresent() && !prop.get().isEmpty() && !prop.get().isBlank();
   }
 }

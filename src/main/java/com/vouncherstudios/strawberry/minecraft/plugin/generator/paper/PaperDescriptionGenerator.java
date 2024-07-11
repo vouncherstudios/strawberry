@@ -34,6 +34,7 @@ import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
 import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
 import com.vouncherstudios.strawberry.minecraft.plugin.extension.PaperExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.DescriptionGenerator;
+import com.vouncherstudios.strawberry.utils.StringUtils;
 import java.io.File;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -61,24 +62,40 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
 
   @Override
   public void generate(@Nonnull Project project, @Nonnull Directory directory) {
-    PaperExtension paper = this.strawberry.minecraft().plugin().paper();
+    PaperExtension extension = this.strawberry.minecraft().plugin().paper();
 
     ObjectNode node = MAPPER.createObjectNode();
 
-    String name = paper.name().get();
+    node.put("name", extension.name().get());
+    node.put("main", extension.main().get());
+    node.put("load", extension.load().get().toString());
 
-    node.put("name", name);
-    node.put("main", paper.main().get());
-    node.put("version", project.getVersion().toString());
-    node.put("description", project.getDescription());
-    node.put("load", paper.load().get().toString());
+    String version = project.getVersion().toString();
 
-    Property<String> apiVersionProp = paper.apiVersion();
+    Property<String> versionProp = extension.version();
+    if (versionProp.isPresent()) {
+      version = versionProp.get();
+    }
+
+    node.put("version", version);
+
+    String description = project.getDescription();
+
+    Property<String> descriptionProp = extension.description();
+    if (descriptionProp.isPresent()) {
+      description = descriptionProp.get();
+    }
+
+    if (description != null && !description.isBlank()) {
+      node.put("description", description);
+    }
+
+    Property<String> apiVersionProp = extension.apiVersion();
     if (apiVersionProp.isPresent()) {
       node.put("api-version", apiVersionProp.get());
     }
 
-    Set<String> authors = paper.authors().get();
+    Set<String> authors = extension.authors().get();
     if (!authors.isEmpty()) {
 
       // Single author
@@ -100,7 +117,7 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
     ArrayNode depend = MAPPER.createArrayNode();
     ArrayNode softDepend = MAPPER.createArrayNode();
 
-    for (Dependency dependency : paper.dependencies().get()) {
+    for (Dependency dependency : extension.dependencies().get()) {
       String dependencyId = dependency.getId();
 
       if (dependency.isOptional()) {
@@ -143,6 +160,14 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
     if (!VALID_NAME.matcher(name).matches()) {
       throw new InvalidPluginDescriptionException(
           "Invalid plugin name, should match " + VALID_NAME);
+    }
+
+    if (StringUtils.isNotEmpty(extension.version())) {
+      throw new InvalidPluginDescriptionException("Version can't be empty if present");
+    }
+
+    if (StringUtils.isNotEmpty(extension.description())) {
+      throw new InvalidPluginDescriptionException("Description can't be empty if present");
     }
   }
 }

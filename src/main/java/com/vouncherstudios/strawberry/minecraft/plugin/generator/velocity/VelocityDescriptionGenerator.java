@@ -34,12 +34,14 @@ import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
 import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
 import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.DescriptionGenerator;
+import com.vouncherstudios.strawberry.utils.StringUtils;
 import java.io.File;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import org.gradle.api.Project;
 import org.gradle.api.file.Directory;
+import org.gradle.api.provider.Property;
 
 /** Represents a VelocityExtension plugin description generator. */
 public final class VelocityDescriptionGenerator implements DescriptionGenerator {
@@ -60,13 +62,29 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
 
     ObjectNode node = MAPPER.createObjectNode();
 
-    String name = extension.name().getOrElse("");
-
     node.put("id", extension.id().get());
-    node.put("name", name);
+    node.put("name", extension.name().get());
     node.put("main", extension.main().get());
-    node.put("version", project.getVersion().toString());
-    node.put("description", project.getDescription());
+
+    String version = project.getVersion().toString();
+
+    Property<String> versionProp = extension.version();
+    if (versionProp.isPresent()) {
+      version = versionProp.get();
+    }
+
+    node.put("version", version);
+
+    String description = project.getDescription();
+
+    Property<String> descriptionProp = extension.description();
+    if (descriptionProp.isPresent()) {
+      description = descriptionProp.get();
+    }
+
+    if (description != null && !description.isBlank()) {
+      node.put("description", description);
+    }
 
     ArrayNode authorsNode = MAPPER.createArrayNode();
 
@@ -113,6 +131,14 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
         throw new InvalidPluginDescriptionException(
             main + " may not be within the " + invalidNamespace + " namespace");
       }
+    }
+
+    if (StringUtils.isNotEmpty(extension.version())) {
+      throw new InvalidPluginDescriptionException("Version can't be empty if present");
+    }
+
+    if (StringUtils.isNotEmpty(extension.description())) {
+      throw new InvalidPluginDescriptionException("Description can't be empty if present");
     }
   }
 }

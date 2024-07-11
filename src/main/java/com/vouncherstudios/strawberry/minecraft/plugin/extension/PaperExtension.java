@@ -68,6 +68,41 @@ public interface PaperExtension {
   }
 
   /**
+   * The version of the plugin. If not set, the version will be set to project's version.
+   *
+   * @return a property providing the version of the plugin
+   */
+  @Nonnull
+  Property<String> version();
+
+  /**
+   * Sets the version of the plugin.
+   *
+   * @param version the version of the plugin
+   */
+  default void version(@Nonnull String version) {
+    version().set(version);
+  }
+
+  /**
+   * The description of the plugin. If not set, the description will be set to project's
+   * description.
+   *
+   * @return a property providing the description of the plugin
+   */
+  @Nonnull
+  Property<String> description();
+
+  /**
+   * Sets the description of the plugin.
+   *
+   * @param description the description of the plugin
+   */
+  default void description(@Nonnull String description) {
+    description().set(description);
+  }
+
+  /**
    * The authors of the plugin.
    *
    * @return a property providing the author of the plugin

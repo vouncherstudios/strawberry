@@ -36,6 +36,8 @@ import org.gradle.api.provider.SetProperty;
 public class PaperExtensionImpl implements PaperExtension {
   private final Property<String> main;
   private final Property<String> name;
+  private final Property<String> version;
+  private final Property<String> description;
   private final SetProperty<String> authors;
   private final Property<LoadOrder> load;
   private final SetProperty<Dependency> dependencies;
@@ -45,6 +47,8 @@ public class PaperExtensionImpl implements PaperExtension {
   public PaperExtensionImpl(@Nonnull ObjectFactory objects) {
     this.main = objects.property(String.class);
     this.name = objects.property(String.class);
+    this.version = objects.property(String.class);
+    this.description = objects.property(String.class);
     this.authors = objects.setProperty(String.class);
     this.load = objects.property(LoadOrder.class).convention(LoadOrder.POSTWORLD);
     this.dependencies = objects.setProperty(Dependency.class);
@@ -61,6 +65,18 @@ public class PaperExtensionImpl implements PaperExtension {
   @Override
   public Property<String> name() {
     return this.name;
+  }
+
+  @Nonnull
+  @Override
+  public Property<String> version() {
+    return this.version;
+  }
+
+  @Nonnull
+  @Override
+  public Property<String> description() {
+    return this.description;
   }
 
   @Nonnull

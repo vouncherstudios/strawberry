@@ -34,6 +34,8 @@ import org.gradle.api.provider.SetProperty;
 
 public class VelocityExtensionImpl implements VelocityExtension {
   private final Property<String> main;
+  private final Property<String> version;
+  private final Property<String> description;
   private final Property<String> id;
   private final Property<String> name;
   private final SetProperty<String> authors;
@@ -42,6 +44,8 @@ public class VelocityExtensionImpl implements VelocityExtension {
   @Inject
   public VelocityExtensionImpl(@Nonnull ObjectFactory objects) {
     this.main = objects.property(String.class);
+    this.version = objects.property(String.class);
+    this.description = objects.property(String.class);
     this.id = objects.property(String.class);
     this.name = objects.property(String.class);
     this.authors = objects.setProperty(String.class);
@@ -52,6 +56,18 @@ public class VelocityExtensionImpl implements VelocityExtension {
   @Override
   public Property<String> main() {
     return this.main;
+  }
+
+  @Nonnull
+  @Override
+  public Property<String> version() {
+    return this.version;
+  }
+
+  @Nonnull
+  @Override
+  public Property<String> description() {
+    return this.description;
   }
 
   @Nonnull
