@@ -2,6 +2,7 @@ plugins {
     id("net.kyori.indra") version Versions.INDRA
     id("com.gradle.plugin-publish") version Versions.GRADLE_PUBLISH
     id("net.kyori.indra.publishing.gradle-plugin") version Versions.INDRA
+    id("net.kyori.indra.licenser.spotless") version Versions.INDRA
 }
 
 group = "com.vouncherstudios"
@@ -56,4 +57,9 @@ indraPluginPublishing {
         project.description,
         listOf("java", "minecraft", "boilerplate")
     )
+}
+
+// Add a new line between package declaration and copyright
+indraSpotlessLicenser {
+    newLine(true)
 }
