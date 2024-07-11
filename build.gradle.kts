@@ -23,7 +23,7 @@ dependencies {
 
 indra {
     javaVersions {
-        target(8)
+        target(11)
     }
 
     github("vouncherstudios", "strawberry")
