@@ -82,7 +82,7 @@ public final class Relocation {
   }
 
   @Override
-  public boolean equals(@Nonnull Object o) {
+  public boolean equals(@Nullable Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Relocation that = (Relocation) o;

@@ -30,11 +30,11 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vouncherstudios.strawberry.StrawberryExtension;
+import com.vouncherstudios.strawberry.gradle.utils.GradlePropertyUtils;
 import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
 import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
-import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.velocity.VelocityExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.DescriptionGenerator;
-import com.vouncherstudios.strawberry.utils.StringUtils;
 import java.io.File;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -133,11 +133,11 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
       }
     }
 
-    if (StringUtils.isNotEmpty(extension.version())) {
+    if (GradlePropertyUtils.isNotEmpty(extension.version())) {
       throw new InvalidPluginDescriptionException("Version can't be empty if present");
     }
 
-    if (StringUtils.isNotEmpty(extension.description())) {
+    if (GradlePropertyUtils.isNotEmpty(extension.description())) {
       throw new InvalidPluginDescriptionException("Description can't be empty if present");
     }
   }

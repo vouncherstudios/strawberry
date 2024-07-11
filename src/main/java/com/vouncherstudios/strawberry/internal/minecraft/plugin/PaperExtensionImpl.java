@@ -25,7 +25,7 @@
 package com.vouncherstudios.strawberry.internal.minecraft.plugin;
 
 import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
-import com.vouncherstudios.strawberry.minecraft.plugin.extension.PaperExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.paper.PaperExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.paper.LoadOrder;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;

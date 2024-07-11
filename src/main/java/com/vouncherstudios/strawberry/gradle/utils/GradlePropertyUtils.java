@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.utils;
+package com.vouncherstudios.strawberry.gradle.utils;
 
 import javax.annotation.Nonnull;
 import org.gradle.api.provider.Property;
 
-public final class StringUtils {
-  private StringUtils() {}
+public final class GradlePropertyUtils {
+  private GradlePropertyUtils() {}
 
   public static boolean isNotEmpty(@Nonnull Property<String> property) {
     return property.isPresent() && !property.get().isBlank();

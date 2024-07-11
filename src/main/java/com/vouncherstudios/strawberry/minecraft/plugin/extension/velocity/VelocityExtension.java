@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.minecraft.plugin.extension;
+package com.vouncherstudios.strawberry.minecraft.plugin.extension.velocity;
 
 import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
-import com.vouncherstudios.strawberry.minecraft.plugin.generator.paper.LoadOrder;
 import javax.annotation.Nonnull;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.SetProperty;
 
-/** A paper plugin description configurable interface. */
-public interface PaperExtension {
+/** A velocity plugin description configurable interface. */
+public interface VelocityExtension {
+
   /**
    * The plugin's initial class file. This main can't start with minecraft packages or derivative.
    *
@@ -47,24 +47,6 @@ public interface PaperExtension {
    */
   default void main(@Nonnull String main) {
     main().set(main);
-  }
-
-  /**
-   * The name of the plugin. This name should be unique as to not conflict with other plugins. The
-   * plugin name may contain alphanumeric characters, dashes, and underscores.
-   *
-   * @return a property providing the name for this plugin
-   */
-  @Nonnull
-  Property<String> name();
-
-  /**
-   * Sets the name of the plugin.
-   *
-   * @param name the name of the plugin
-   */
-  default void name(@Nonnull String name) {
-    name().set(name);
   }
 
   /**
@@ -103,6 +85,42 @@ public interface PaperExtension {
   }
 
   /**
+   * The id of the plugin. This id should be unique as to not conflict with other plugins. The
+   * plugin id may contain alphanumeric characters, dashes, and underscores, and be a maximum of 64
+   * characters long.
+   *
+   * @return a property providing the id for this plugin
+   */
+  @Nonnull
+  Property<String> id();
+
+  /**
+   * Sets the id of the plugin.
+   *
+   * @param id the id of the plugin
+   */
+  default void id(@Nonnull String id) {
+    id().set(id);
+  }
+
+  /**
+   * The human-readable name of the plugin as to be used in descriptions and similar things.
+   *
+   * @return a property providing the plugin name
+   */
+  @Nonnull
+  Property<String> name();
+
+  /**
+   * Sets the human-readable name of the plugin.
+   *
+   * @param name the human-readable name of the plugin
+   */
+  default void name(@Nonnull String name) {
+    name().set(name);
+  }
+
+  /**
    * The authors of the plugin.
    *
    * @return a property providing the author of the plugin
@@ -122,23 +140,6 @@ public interface PaperExtension {
   }
 
   /**
-   * The phase of server-startup this plugin will load during.
-   *
-   * @return a property providing the plugin's load order
-   */
-  @Nonnull
-  Property<LoadOrder> load();
-
-  /**
-   * Sets the plugin's load order.
-   *
-   * @param loadOrder the plugin's load order
-   */
-  default void load(@Nonnull LoadOrder loadOrder) {
-    load().set(loadOrder);
-  }
-
-  /**
    * The dependencies required to load before this plugin.
    *
    * @return a property providing the plugin dependencies
@@ -152,20 +153,20 @@ public interface PaperExtension {
    * <p>By default this dependency is not optional, it will be a hard-dependency. If you want to add
    * a soft-dependency, use other {@link #addDependency(String, boolean) addDependency} method.
    *
-   * @param pluginName the plugin name of the dependency
+   * @param id the plugin id of the dependency
    */
-  default void addDependency(@Nonnull String pluginName) {
-    addDependency(pluginName, false);
+  default void addDependency(@Nonnull String id) {
+    addDependency(id, false);
   }
 
   /**
    * Adds a dependency to load before this plugin.
    *
-   * @param pluginName the plugin name of the dependency
+   * @param id the plugin id of the dependency
    * @param optional whether the dependency is not required to enable this plugin
    */
-  default void addDependency(@Nonnull String pluginName, boolean optional) {
-    dependencies().add(new Dependency(pluginName, optional));
+  default void addDependency(@Nonnull String id, boolean optional) {
+    dependencies().add(new Dependency(id, optional));
   }
 
   /**
@@ -175,38 +176,21 @@ public interface PaperExtension {
    * add soft-dependencies, use other {@link #addDependencies(boolean, String...) addDependencies}
    * method.
    *
-   * @param pluginNames the plugin name of the dependencies
+   * @param ids the plugin id of the dependencies
    */
-  default void addDependencies(@Nonnull String... pluginNames) {
-    addDependencies(false, pluginNames);
+  default void addDependencies(@Nonnull String... ids) {
+    addDependencies(false, ids);
   }
 
   /**
    * Adds dependencies to load before this plugin.
    *
-   * @param pluginNames the plugin name of the dependencies
+   * @param ids the plugin id of the dependencies
    * @param optional whether the dependencies are not required to enable this plugin
    */
-  default void addDependencies(boolean optional, @Nonnull String... pluginNames) {
-    for (String pluginName : pluginNames) {
-      dependencies().add(new Dependency(pluginName, optional));
+  default void addDependencies(boolean optional, @Nonnull String... ids) {
+    for (String id : ids) {
+      dependencies().add(new Dependency(id, optional));
     }
-  }
-
-  /**
-   * The API version which this plugin is designed to support.
-   *
-   * @return a property providing the api version
-   */
-  @Nonnull
-  Property<String> apiVersion();
-
-  /**
-   * Sets the API version.
-   *
-   * @param apiVersion the API version
-   */
-  default void apiVersion(@Nonnull String apiVersion) {
-    apiVersion().set(apiVersion);
   }
 }

@@ -24,6 +24,8 @@
 
 package com.vouncherstudios.strawberry.minecraft.plugin.extension;
 
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.paper.PaperExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.velocity.VelocityExtension;
 import javax.annotation.Nonnull;
 import org.gradle.api.Action;
 

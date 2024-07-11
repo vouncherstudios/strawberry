@@ -25,11 +25,11 @@
 package com.vouncherstudios.strawberry.minecraft.plugin.generator;
 
 import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.minecraft.plugin.extension.PaperExtension;
-import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
+import com.vouncherstudios.strawberry.gradle.utils.GradlePropertyUtils;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.paper.PaperExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.velocity.VelocityExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.paper.PaperDescriptionGenerator;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.velocity.VelocityDescriptionGenerator;
-import com.vouncherstudios.strawberry.utils.StringUtils;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -45,7 +45,8 @@ public enum DescriptionGeneratorType {
     @Override
     public boolean isAvailable(@Nonnull StrawberryExtension extension) {
       PaperExtension paper = extension.minecraft().plugin().paper();
-      return StringUtils.isNotEmpty(paper.name()) && StringUtils.isNotEmpty(paper.main());
+      return GradlePropertyUtils.isNotEmpty(paper.name())
+          && GradlePropertyUtils.isNotEmpty(paper.main());
     }
   },
   VELOCITY {
@@ -57,9 +58,9 @@ public enum DescriptionGeneratorType {
     @Override
     public boolean isAvailable(@Nonnull StrawberryExtension extension) {
       VelocityExtension velocity = extension.minecraft().plugin().velocity();
-      return StringUtils.isNotEmpty(velocity.main())
-          && StringUtils.isNotEmpty(velocity.id())
-          && StringUtils.isNotEmpty(velocity.name());
+      return GradlePropertyUtils.isNotEmpty(velocity.main())
+          && GradlePropertyUtils.isNotEmpty(velocity.id())
+          && GradlePropertyUtils.isNotEmpty(velocity.name());
     }
   };
 

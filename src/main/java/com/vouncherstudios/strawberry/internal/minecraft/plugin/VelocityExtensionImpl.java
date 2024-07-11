@@ -25,7 +25,7 @@
 package com.vouncherstudios.strawberry.internal.minecraft.plugin;
 
 import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
-import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.velocity.VelocityExtension;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import org.gradle.api.model.ObjectFactory;
