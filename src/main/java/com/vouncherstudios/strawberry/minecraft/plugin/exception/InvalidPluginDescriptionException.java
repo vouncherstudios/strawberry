@@ -27,6 +27,7 @@ package com.vouncherstudios.strawberry.minecraft.plugin.exception;
 import javax.annotation.Nullable;
 
 /** Represents an exception that is thrown when a plugin description is invalid. */
+@SuppressWarnings("serial")
 public final class InvalidPluginDescriptionException extends Exception {
 
   /**
