@@ -7,7 +7,7 @@ plugins {
 
 group = "com.vouncherstudios"
 version = "1.0.0"
-description = "A set of Gradle plugins to apply common organization build settings."
+description = "A gradle plugin to apply common organization build settings."
 
 repositories {
     mavenCentral()

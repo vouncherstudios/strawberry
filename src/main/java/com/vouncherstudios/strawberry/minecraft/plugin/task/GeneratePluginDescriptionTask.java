@@ -39,7 +39,7 @@ import org.gradle.api.tasks.TaskAction;
 
 /**
  * The generate plugin description gradle task. It will generate the plugin description based on
- * user defined strawberry configuration.
+ * user defined Strawberry configuration.
  */
 public abstract class GeneratePluginDescriptionTask extends DefaultTask {
   // A set to hold the different types of description generators
