@@ -24,12 +24,19 @@
 
 package com.vouncherstudios.strawberry;
 
+import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
+import com.vouncherstudios.strawberry.internal.StrawberryExtensionImpl;
+import com.vouncherstudios.strawberry.shadow.Relocation;
 import javax.annotation.Nonnull;
 import net.kyori.indra.IndraPlugin;
 import net.kyori.mammoth.ProjectPlugin;
+import net.kyori.mammoth.Properties;
+import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.PluginContainer;
+import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.util.GradleVersion;
 
@@ -44,6 +51,40 @@ public final class StrawberryPlugin implements ProjectPlugin {
       @Nonnull TaskContainer tasks) {
     // Apply gradle plugins
     plugins.apply(IndraPlugin.class);
+    plugins.apply(ShadowPlugin.class);
+
+    StrawberryExtensionImpl strawberry = (StrawberryExtensionImpl) Strawberry.extension(extensions);
+
+    // Configure shadow
+    tasks
+        .withType(ShadowJar.class)
+        .configureEach(
+            shadowJar -> {
+              // Add relocations
+              SetProperty<Relocation> relocationsProp =
+                  Properties.finalized(strawberry.relocations());
+              for (Relocation relocation : relocationsProp.get()) {
+                shadowJar.relocate(
+                    relocation.getPattern(),
+                    relocation.getDestination(),
+                    relocation.getConfiguration());
+              }
+
+              // Remove archive classifier from output jar
+              shadowJar.getArchiveClassifier().set("");
+              // Copy all final jar to build directory
+              shadowJar.doLast(
+                  task ->
+                      project.copy(
+                          copySpec ->
+                              copySpec
+                                  .from(shadowJar.getArchiveFile())
+                                  .into(project.getRootProject().getProjectDir() + "/build")));
+            });
+    // Add shadowJar task as dependency on build task
+    tasks
+        .named("build", DefaultTask.class)
+        .configure(build -> build.dependsOn(tasks.named("shadowJar", ShadowJar.class)));
   }
 
   @Nonnull

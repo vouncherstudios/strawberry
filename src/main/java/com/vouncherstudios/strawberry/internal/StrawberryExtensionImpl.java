@@ -22,31 +22,26 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry;
+package com.vouncherstudios.strawberry.internal;
 
-import com.vouncherstudios.strawberry.internal.StrawberryExtensionImpl;
-import net.kyori.mammoth.Extensions;
-import org.gradle.api.plugins.ExtensionContainer;
-import org.gradle.util.GradleVersion;
-
+import com.vouncherstudios.strawberry.StrawberryExtension;
+import com.vouncherstudios.strawberry.shadow.Relocation;
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.SetProperty;
 
-/** Information about the plugin. */
-public final class Strawberry {
-  /** The minimum supported Gradle version for the Strawberry suite. */
-  public static final GradleVersion MINIMUM_SUPPORTED = GradleVersion.version("7.5");
+public class StrawberryExtensionImpl implements StrawberryExtension {
+  private final SetProperty<Relocation> relocations;
 
-  public static final String EXTENSION_NAME = "strawberry";
+  @Inject
+  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
+    this.relocations = objects.setProperty(Relocation.class);
+  }
 
-  /**
-   * Gets or creates the {@code strawberry} extension for a project.
-   *
-   * @param extensions the extensions container
-   * @return the appropriate extension instance
-   */
   @Nonnull
-  public static StrawberryExtension extension(@Nonnull ExtensionContainer extensions) {
-    return Extensions.findOrCreate(
-            extensions, EXTENSION_NAME, StrawberryExtension.class, StrawberryExtensionImpl.class);
+  @Override
+  public SetProperty<Relocation> relocations() {
+    return this.relocations;
   }
 }
