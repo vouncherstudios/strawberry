@@ -22,9 +22,19 @@
  * SOFTWARE.
  */
 
-object Versions {
-    const val INDRA = "3.1.3"
-    const val GRADLE_PUBLISH = "1.2.1"
-    const val SHADOW = "8.1.1"
-    const val JACKSON = "2.17.1"
+package com.vouncherstudios.strawberry.minecraft.plugin.exception;
+
+import javax.annotation.Nullable;
+
+/** Represents an exception that is thrown when a plugin description is invalid. */
+public final class InvalidPluginDescriptionException extends Exception {
+
+  /**
+   * Constructor with a specific message.
+   *
+   * @param message the specific reason why the plugin description is invalid
+   */
+  public InvalidPluginDescriptionException(@Nullable String message) {
+    super("Invalid plugin description: " + message);
+  }
 }

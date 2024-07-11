@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Vouncher Studios <contact@vouncherstudios>
+ * Copyright (c) Vouncher Studios <contact@vouncherstudios.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,8 @@ package com.vouncherstudios.strawberry;
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import com.vouncherstudios.strawberry.internal.StrawberryExtensionImpl;
+import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
+import com.vouncherstudios.strawberry.minecraft.plugin.task.GeneratePluginDescriptionTask;
 import com.vouncherstudios.strawberry.shadow.Relocation;
 import javax.annotation.Nonnull;
 import net.kyori.indra.IndraPlugin;
@@ -34,9 +36,12 @@ import net.kyori.mammoth.ProjectPlugin;
 import net.kyori.mammoth.Properties;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.provider.SetProperty;
+import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.util.GradleVersion;
 
@@ -85,6 +90,44 @@ public final class StrawberryPlugin implements ProjectPlugin {
     tasks
         .named("build", DefaultTask.class)
         .configure(build -> build.dependsOn(tasks.named("shadowJar", ShadowJar.class)));
+
+    // Create minecraft generate plugin description task
+    Task generatePluginDescriptionTask =
+        tasks
+            .register(
+                "minecraftGeneratePluginDescription",
+                GeneratePluginDescriptionTask.class,
+                task -> {
+                  String name = "minecraft-plugin-description";
+                  task.setDescription(
+                      "Generate the plugin description based on user defined strawberry configuration.");
+                  task.setGroup(name);
+                  task.setOutputDirectory(
+                      project
+                          .getLayout()
+                          .getBuildDirectory()
+                          .dir("generated/" + Strawberry.EXTENSION_NAME + "/" + name));
+
+                  task.doFirst(
+                      t -> {
+                        task.setGenerators(strawberry);
+                        try {
+                          task.validate();
+                        } catch (InvalidPluginDescriptionException e) {
+                          throw new RuntimeException(e);
+                        }
+                      });
+                })
+            .get();
+    // Add generate plugin description task as dependency on build task
+    tasks
+        .named("build", DefaultTask.class)
+        .configure(build -> build.dependsOn(generatePluginDescriptionTask));
+    // Copy plugin description output to our final jar
+    extensions
+        .getByType(SourceSetContainer.class)
+        .named(SourceSet.MAIN_SOURCE_SET_NAME)
+        .configure(sourceSet -> sourceSet.getResources().srcDir(generatePluginDescriptionTask));
   }
 
   @Nonnull

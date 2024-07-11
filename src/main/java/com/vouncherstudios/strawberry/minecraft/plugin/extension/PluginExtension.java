@@ -22,43 +22,21 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.internal;
+package com.vouncherstudios.strawberry.minecraft.plugin.extension;
 
-import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.internal.minecraft.MinecraftExtensionImpl;
-import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
-import com.vouncherstudios.strawberry.shadow.Relocation;
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import net.kyori.mammoth.Configurable;
 import org.gradle.api.Action;
-import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.provider.SetProperty;
 
-public class StrawberryExtensionImpl implements StrawberryExtension {
-  private final SetProperty<Relocation> relocations;
-  private final MinecraftExtension minecraft;
-
-  @Inject
-  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
-    this.relocations = objects.setProperty(Relocation.class);
-    this.minecraft = objects.newInstance(MinecraftExtensionImpl.class);
-  }
+/** A minecraft plugin description configurable interface. */
+public interface PluginExtension {
 
   @Nonnull
-  @Override
-  public SetProperty<Relocation> relocations() {
-    return this.relocations;
-  }
+  VelocityExtension velocity();
+
+  void velocity(@Nonnull Action<VelocityExtension> action);
 
   @Nonnull
-  @Override
-  public MinecraftExtension minecraft() {
-    return this.minecraft;
-  }
+  PaperExtension paper();
 
-  @Override
-  public void minecraft(@Nonnull Action<MinecraftExtension> action) {
-    Configurable.configure(this.minecraft, action);
-  }
+  void paper(@Nonnull Action<PaperExtension> action);
 }

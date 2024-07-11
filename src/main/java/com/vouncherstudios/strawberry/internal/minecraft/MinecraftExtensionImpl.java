@@ -22,43 +22,33 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.internal;
+package com.vouncherstudios.strawberry.internal.minecraft;
 
-import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.internal.minecraft.MinecraftExtensionImpl;
+import com.vouncherstudios.strawberry.internal.minecraft.plugin.PluginExtensionImpl;
 import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
-import com.vouncherstudios.strawberry.shadow.Relocation;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.PluginExtension;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import net.kyori.mammoth.Configurable;
 import org.gradle.api.Action;
 import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.provider.SetProperty;
 
-public class StrawberryExtensionImpl implements StrawberryExtension {
-  private final SetProperty<Relocation> relocations;
-  private final MinecraftExtension minecraft;
+public class MinecraftExtensionImpl implements MinecraftExtension {
+  private final PluginExtensionImpl plugin;
 
   @Inject
-  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
-    this.relocations = objects.setProperty(Relocation.class);
-    this.minecraft = objects.newInstance(MinecraftExtensionImpl.class);
+  public MinecraftExtensionImpl(@Nonnull ObjectFactory objects) {
+    this.plugin = objects.newInstance(PluginExtensionImpl.class);
   }
 
   @Nonnull
   @Override
-  public SetProperty<Relocation> relocations() {
-    return this.relocations;
-  }
-
-  @Nonnull
-  @Override
-  public MinecraftExtension minecraft() {
-    return this.minecraft;
+  public PluginExtensionImpl plugin() {
+    return this.plugin;
   }
 
   @Override
-  public void minecraft(@Nonnull Action<MinecraftExtension> action) {
-    Configurable.configure(this.minecraft, action);
+  public void plugin(@Nonnull Action<PluginExtension> action) {
+    Configurable.configure(this.plugin, action);
   }
 }

@@ -22,43 +22,51 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.internal;
+package com.vouncherstudios.strawberry.minecraft.plugin.dependency;
 
-import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.internal.minecraft.MinecraftExtensionImpl;
-import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
-import com.vouncherstudios.strawberry.shadow.Relocation;
+import java.util.Objects;
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import net.kyori.mammoth.Configurable;
-import org.gradle.api.Action;
-import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.provider.SetProperty;
+import javax.annotation.Nullable;
 
-public class StrawberryExtensionImpl implements StrawberryExtension {
-  private final SetProperty<Relocation> relocations;
-  private final MinecraftExtension minecraft;
+/** Indicates that the plugin depends on another plugin in order to enable. */
+public final class Dependency {
+  private final String id;
+  private final boolean optional;
 
-  @Inject
-  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
-    this.relocations = objects.setProperty(Relocation.class);
-    this.minecraft = objects.newInstance(MinecraftExtensionImpl.class);
+  public Dependency(@Nonnull String id, boolean optional) {
+    this.id = id;
+    this.optional = optional;
   }
 
+  /**
+   * Gets the unique identifier of the dependency.
+   *
+   * @return the unique identifier of the dependency
+   */
   @Nonnull
-  @Override
-  public SetProperty<Relocation> relocations() {
-    return this.relocations;
+  public String getId() {
+    return this.id;
   }
 
-  @Nonnull
-  @Override
-  public MinecraftExtension minecraft() {
-    return this.minecraft;
+  /**
+   * Checks if the dependency is optional.
+   *
+   * @return if the dependency is optional
+   */
+  public boolean isOptional() {
+    return this.optional;
   }
 
   @Override
-  public void minecraft(@Nonnull Action<MinecraftExtension> action) {
-    Configurable.configure(this.minecraft, action);
+  public boolean equals(@Nullable Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Dependency that = (Dependency) o;
+    return Objects.equals(this.id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.id);
   }
 }

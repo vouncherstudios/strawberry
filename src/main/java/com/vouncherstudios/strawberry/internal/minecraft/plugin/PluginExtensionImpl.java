@@ -22,43 +22,46 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.internal;
+package com.vouncherstudios.strawberry.internal.minecraft.plugin;
 
-import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.internal.minecraft.MinecraftExtensionImpl;
-import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
-import com.vouncherstudios.strawberry.shadow.Relocation;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.PaperExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.PluginExtension;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import net.kyori.mammoth.Configurable;
 import org.gradle.api.Action;
 import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.provider.SetProperty;
 
-public class StrawberryExtensionImpl implements StrawberryExtension {
-  private final SetProperty<Relocation> relocations;
-  private final MinecraftExtension minecraft;
+public class PluginExtensionImpl implements PluginExtension {
+  private final VelocityExtension velocity;
+  private final PaperExtension paper;
 
   @Inject
-  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
-    this.relocations = objects.setProperty(Relocation.class);
-    this.minecraft = objects.newInstance(MinecraftExtensionImpl.class);
+  public PluginExtensionImpl(@Nonnull ObjectFactory objects) {
+    this.velocity = objects.newInstance(VelocityExtensionImpl.class);
+    this.paper = objects.newInstance(PaperExtensionImpl.class);
   }
 
   @Nonnull
   @Override
-  public SetProperty<Relocation> relocations() {
-    return this.relocations;
+  public VelocityExtension velocity() {
+    return this.velocity;
+  }
+
+  @Override
+  public void velocity(@Nonnull Action<VelocityExtension> action) {
+    Configurable.configure(this.velocity, action);
   }
 
   @Nonnull
   @Override
-  public MinecraftExtension minecraft() {
-    return this.minecraft;
+  public PaperExtension paper() {
+    return this.paper;
   }
 
   @Override
-  public void minecraft(@Nonnull Action<MinecraftExtension> action) {
-    Configurable.configure(this.minecraft, action);
+  public void paper(@Nonnull Action<PaperExtension> action) {
+    Configurable.configure(this.paper, action);
   }
 }

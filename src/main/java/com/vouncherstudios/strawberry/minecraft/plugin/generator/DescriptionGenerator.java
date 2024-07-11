@@ -22,9 +22,34 @@
  * SOFTWARE.
  */
 
-object Versions {
-    const val INDRA = "3.1.3"
-    const val GRADLE_PUBLISH = "1.2.1"
-    const val SHADOW = "8.1.1"
-    const val JACKSON = "2.17.1"
+package com.vouncherstudios.strawberry.minecraft.plugin.generator;
+
+import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
+import java.util.Set;
+import javax.annotation.Nonnull;
+import org.gradle.api.Project;
+import org.gradle.api.file.Directory;
+
+/**
+ * Represents a description generator. It is used to generate a plugin description on the specified
+ * platform.
+ */
+public interface DescriptionGenerator {
+  Set<String> INVALID_NAMESPACES =
+      Set.of("net.minecraft.", "org.bukkit.", "io.papermc.paper.", "com.destroystokoyo.paper.");
+
+  /**
+   * Generates the description for the project.
+   *
+   * @param project the project
+   * @param directory the output file directory
+   */
+  void generate(@Nonnull Project project, @Nonnull Directory directory);
+
+  /**
+   * Checks whether the generator has all mandatory parameters.
+   *
+   * @throws InvalidPluginDescriptionException if it is missing any mandatory parameter
+   */
+  void validate() throws InvalidPluginDescriptionException;
 }

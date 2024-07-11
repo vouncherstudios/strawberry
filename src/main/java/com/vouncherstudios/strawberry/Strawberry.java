@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Vouncher Studios <contact@vouncherstudios>
+ * Copyright (c) Vouncher Studios <contact@vouncherstudios.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,10 @@
 package com.vouncherstudios.strawberry;
 
 import com.vouncherstudios.strawberry.internal.StrawberryExtensionImpl;
+import javax.annotation.Nonnull;
 import net.kyori.mammoth.Extensions;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.util.GradleVersion;
-
-import javax.annotation.Nonnull;
 
 /** Information about the plugin. */
 public final class Strawberry {
@@ -47,6 +46,6 @@ public final class Strawberry {
   @Nonnull
   public static StrawberryExtension extension(@Nonnull ExtensionContainer extensions) {
     return Extensions.findOrCreate(
-            extensions, EXTENSION_NAME, StrawberryExtension.class, StrawberryExtensionImpl.class);
+        extensions, EXTENSION_NAME, StrawberryExtension.class, StrawberryExtensionImpl.class);
   }
 }

@@ -14,9 +14,11 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
     implementation("net.kyori:indra-common:${Versions.INDRA}")
     implementation("com.github.johnrengelman:shadow:${Versions.SHADOW}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${Versions.JACKSON}")
 }
 
 indra {

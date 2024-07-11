@@ -22,43 +22,59 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.internal;
+package com.vouncherstudios.strawberry.internal.minecraft.plugin;
 
-import com.vouncherstudios.strawberry.StrawberryExtension;
-import com.vouncherstudios.strawberry.internal.minecraft.MinecraftExtensionImpl;
-import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
-import com.vouncherstudios.strawberry.shadow.Relocation;
+import com.vouncherstudios.strawberry.minecraft.plugin.dependency.Dependency;
+import com.vouncherstudios.strawberry.minecraft.plugin.extension.VelocityExtension;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
-import net.kyori.mammoth.Configurable;
-import org.gradle.api.Action;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.Property;
 import org.gradle.api.provider.SetProperty;
 
-public class StrawberryExtensionImpl implements StrawberryExtension {
-  private final SetProperty<Relocation> relocations;
-  private final MinecraftExtension minecraft;
+public class VelocityExtensionImpl implements VelocityExtension {
+  private final Property<String> main;
+  private final Property<String> id;
+  private final Property<String> name;
+  private final SetProperty<String> authors;
+  private final SetProperty<Dependency> dependencies;
 
   @Inject
-  public StrawberryExtensionImpl(@Nonnull ObjectFactory objects) {
-    this.relocations = objects.setProperty(Relocation.class);
-    this.minecraft = objects.newInstance(MinecraftExtensionImpl.class);
+  public VelocityExtensionImpl(@Nonnull ObjectFactory objects) {
+    this.main = objects.property(String.class);
+    this.id = objects.property(String.class);
+    this.name = objects.property(String.class);
+    this.authors = objects.setProperty(String.class);
+    this.dependencies = objects.setProperty(Dependency.class);
   }
 
   @Nonnull
   @Override
-  public SetProperty<Relocation> relocations() {
-    return this.relocations;
+  public Property<String> main() {
+    return this.main;
   }
 
   @Nonnull
   @Override
-  public MinecraftExtension minecraft() {
-    return this.minecraft;
+  public Property<String> id() {
+    return this.id;
   }
 
+  @Nonnull
   @Override
-  public void minecraft(@Nonnull Action<MinecraftExtension> action) {
-    Configurable.configure(this.minecraft, action);
+  public Property<String> name() {
+    return this.name;
+  }
+
+  @Nonnull
+  @Override
+  public SetProperty<String> authors() {
+    return this.authors;
+  }
+
+  @Nonnull
+  @Override
+  public SetProperty<Dependency> dependencies() {
+    return this.dependencies;
   }
 }

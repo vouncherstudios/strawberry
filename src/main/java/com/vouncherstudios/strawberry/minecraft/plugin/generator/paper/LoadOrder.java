@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-object Versions {
-    const val INDRA = "3.1.3"
-    const val GRADLE_PUBLISH = "1.2.1"
-    const val SHADOW = "8.1.1"
-    const val JACKSON = "2.17.1"
+package com.vouncherstudios.strawberry.minecraft.plugin.generator.paper;
+
+/** The phase of server-startup the plugin will load during. */
+public enum LoadOrder {
+  STARTUP,
+  POSTWORLD
 }

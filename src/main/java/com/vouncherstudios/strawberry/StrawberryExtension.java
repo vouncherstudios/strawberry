@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Vouncher Studios <contact@vouncherstudios>
+ * Copyright (c) Vouncher Studios <contact@vouncherstudios.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package com.vouncherstudios.strawberry;
 
 import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator;
+import com.vouncherstudios.strawberry.minecraft.extension.MinecraftExtension;
 import com.vouncherstudios.strawberry.shadow.Relocation;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,4 +66,9 @@ public interface StrawberryExtension {
       @Nullable Action<SimpleRelocator> configure) {
     relocations().add(new Relocation(pattern, destination, configure));
   }
+
+  @Nonnull
+  MinecraftExtension minecraft();
+
+  void minecraft(@Nonnull Action<MinecraftExtension> action);
 }
