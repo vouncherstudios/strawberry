@@ -5,7 +5,7 @@ within an organization. This plugin aim to enforce consistency, reduce boilerpla
 
 ## Features
 
-- **Indra and Shadow Plugin Integration**: Seamlessly integrates with Indra and Shadow plugins for advanced project
+- **[Indra](https://github.com/KyoriPowered/indra) and [Shadow](https://github.com/johnrengelman/shadow) Plugin Integration**: Seamlessly integrates with Indra and Shadow plugins for advanced project
   configurations and artifact shading.
 - **Easy Shadow Relocation**: Simplifies the process of relocating packages within shaded jars, ensuring minimal
   conflicts with other plugins.
