@@ -70,4 +70,4 @@ For more detailed usage instructions, refer to the [documentation](https://githu
 
 ## License
 
-Strawberry is released under the MIT License. See the [LICENSE](license_header.txt) file for more details.
+Strawberry is released under the MIT License. See the [LICENSE](LICENSE) file for more details.

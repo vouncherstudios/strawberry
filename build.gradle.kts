@@ -59,7 +59,7 @@ indraPluginPublishing {
     )
 }
 
-// Add a new line between package declaration and copyright
 indraSpotlessLicenser {
+    licenseHeaderFile(file("LICENSE"))
     newLine(true)
 }
