@@ -37,6 +37,7 @@ import net.kyori.mammoth.Properties;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.provider.SetProperty;
@@ -90,6 +91,35 @@ public final class StrawberryPlugin implements ProjectPlugin {
     tasks
         .named("build", DefaultTask.class)
         .configure(build -> build.dependsOn(tasks.named("shadowJar", ShadowJar.class)));
+    // Add shadowJar task as dependency on other projects shadowJar task
+    tasks
+        .named("shadowJar", ShadowJar.class)
+        .configure(
+            shadowJar ->
+                project
+                    .getConfigurations()
+                    .forEach(
+                        configuration ->
+                            configuration
+                                .getDependencies()
+                                .forEach(
+                                    dependency -> {
+                                      if (dependency instanceof ProjectDependency) {
+                                        Project dependentProject =
+                                            ((ProjectDependency) dependency).getDependencyProject();
+                                        ShadowJar shadowJarTask =
+                                            dependentProject
+                                                .getTasks()
+                                                .named("shadowJar", ShadowJar.class)
+                                                .getOrNull();
+                                        if (shadowJarTask != null) {
+                                          project
+                                              .getTasks()
+                                              .getByName("shadowJar")
+                                              .dependsOn(shadowJarTask);
+                                        }
+                                      }
+                                    })));
 
     // Create minecraft generate plugin description task
     Task generatePluginDescriptionTask =
