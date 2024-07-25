@@ -26,7 +26,7 @@ To use the Strawberry plugin, add the following to your project's `build.gradle`
 
 ```groovy
 plugins {
-    id 'com.vouncherstudios.strawberry' version '1.0.0'
+    id 'com.vouncherstudios.strawberry' version '1.0.1'
 }
 ```
 
