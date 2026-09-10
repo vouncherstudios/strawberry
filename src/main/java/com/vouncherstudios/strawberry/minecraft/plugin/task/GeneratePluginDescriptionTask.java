@@ -32,21 +32,32 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.file.Directory;
-import org.gradle.api.provider.Provider;
+import org.gradle.api.file.DirectoryProperty;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.work.DisableCachingByDefault;
 
 /**
  * The generate plugin description gradle task. It will generate the plugin description based on
  * user defined Strawberry configuration.
  */
+@DisableCachingByDefault(because = "Generator configuration is not yet modeled as task inputs")
 public abstract class GeneratePluginDescriptionTask extends DefaultTask {
   // A set to hold the different types of description generators
   private final Set<DescriptionGenerator> generators = new HashSet<>();
 
-  // The output directory for the generated plugin description
-  @OutputDirectory private Provider<Directory> outputDirectory;
+  @Input
+  public abstract Property<String> getProjectVersion();
+
+  @Input
+  @Optional
+  public abstract Property<String> getProjectDescription();
+
+  @OutputDirectory
+  public abstract DirectoryProperty getOutputDirectory();
 
   /**
    * The task action to generate the plugin description. It iterates over the set of generators and
@@ -54,8 +65,17 @@ public abstract class GeneratePluginDescriptionTask extends DefaultTask {
    */
   @TaskAction
   public void generate() {
+    try {
+      validate();
+    } catch (InvalidPluginDescriptionException e) {
+      throw new RuntimeException(e);
+    }
+
     for (DescriptionGenerator generator : this.generators) {
-      generator.generate(getProject(), outputDirectory.get());
+      generator.generate(
+          getProjectVersion().get(),
+          getProjectDescription().getOrNull(),
+          getOutputDirectory().get());
     }
   }
 
@@ -80,24 +100,5 @@ public abstract class GeneratePluginDescriptionTask extends DefaultTask {
   public void setGenerators(@Nonnull StrawberryExtension strawberry) {
     Set<DescriptionGenerator> generators = DescriptionGeneratorType.fromExt(strawberry);
     this.generators.addAll(generators);
-  }
-
-  /**
-   * Sets the output directory for the generated plugin description.
-   *
-   * @param outputDirectory the output directory
-   */
-  public void setOutputDirectory(@Nonnull Provider<Directory> outputDirectory) {
-    this.outputDirectory = outputDirectory;
-  }
-
-  /**
-   * Returns the output directory for the generated plugin description.
-   *
-   * @return the output directory
-   */
-  @Nonnull
-  public Provider<Directory> getOutputDirectory() {
-    return this.outputDirectory;
   }
 }

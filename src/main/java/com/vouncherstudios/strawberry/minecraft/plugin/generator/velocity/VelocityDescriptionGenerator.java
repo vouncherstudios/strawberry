@@ -39,7 +39,7 @@ import java.io.File;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
-import org.gradle.api.Project;
+import javax.annotation.Nullable;
 import org.gradle.api.file.Directory;
 import org.gradle.api.provider.Property;
 
@@ -57,7 +57,10 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
   }
 
   @Override
-  public void generate(@Nonnull Project project, @Nonnull Directory directory) {
+  public void generate(
+      @Nonnull String projectVersion,
+      @Nullable String projectDescription,
+      @Nonnull Directory directory) {
     VelocityExtension extension = this.strawberry.minecraft().plugin().velocity();
 
     ObjectNode node = MAPPER.createObjectNode();
@@ -66,7 +69,7 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
     node.put("name", extension.name().get());
     node.put("main", extension.main().get());
 
-    String version = project.getVersion().toString();
+    String version = projectVersion;
 
     Property<String> versionProp = extension.version();
     if (versionProp.isPresent()) {
@@ -75,7 +78,7 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
 
     node.put("version", version);
 
-    String description = project.getDescription();
+    String description = projectDescription;
 
     Property<String> descriptionProp = extension.description();
     if (descriptionProp.isPresent()) {

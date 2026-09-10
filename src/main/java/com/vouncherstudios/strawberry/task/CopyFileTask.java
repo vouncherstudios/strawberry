@@ -22,38 +22,37 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.minecraft.plugin.generator;
+package com.vouncherstudios.strawberry.task;
 
-import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.gradle.api.file.Directory;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.tasks.CacheableTask;
+import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.OutputFile;
+import org.gradle.api.tasks.PathSensitive;
+import org.gradle.api.tasks.PathSensitivity;
+import org.gradle.api.tasks.TaskAction;
 
-/**
- * Represents a description generator. It is used to generate a plugin description on the specified
- * platform.
- */
-public interface DescriptionGenerator {
-  Set<String> INVALID_NAMESPACES =
-      Set.of("net.minecraft.", "org.bukkit.", "io.papermc.paper.", "com.destroystokoyo.paper.");
+/** Copies one build artifact to an explicitly declared destination file. */
+@CacheableTask
+public abstract class CopyFileTask extends DefaultTask {
 
-  /**
-   * Generates the description for the project.
-   *
-   * @param projectVersion the project version
-   * @param projectDescription the project description
-   * @param directory the output file directory
-   */
-  void generate(
-      @Nonnull String projectVersion,
-      @Nullable String projectDescription,
-      @Nonnull Directory directory);
+  @InputFile
+  @PathSensitive(PathSensitivity.NONE)
+  public abstract RegularFileProperty getSourceFile();
 
-  /**
-   * Checks whether the generator has all mandatory parameters.
-   *
-   * @throws InvalidPluginDescriptionException if it is missing any mandatory parameter
-   */
-  void validate() throws InvalidPluginDescriptionException;
+  @OutputFile
+  public abstract RegularFileProperty getDestinationFile();
+
+  @TaskAction
+  public void copy() throws IOException {
+    Path source = getSourceFile().get().getAsFile().toPath();
+    Path destination = getDestinationFile().get().getAsFile().toPath();
+    Files.createDirectories(destination.getParent());
+    Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+  }
 }

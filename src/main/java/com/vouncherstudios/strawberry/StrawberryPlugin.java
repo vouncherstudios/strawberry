@@ -27,23 +27,24 @@ package com.vouncherstudios.strawberry;
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import com.vouncherstudios.strawberry.internal.StrawberryExtensionImpl;
-import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDescriptionException;
 import com.vouncherstudios.strawberry.minecraft.plugin.task.GeneratePluginDescriptionTask;
 import com.vouncherstudios.strawberry.shadow.Relocation;
+import com.vouncherstudios.strawberry.task.CopyFileTask;
 import javax.annotation.Nonnull;
 import net.kyori.indra.IndraPlugin;
 import net.kyori.mammoth.ProjectPlugin;
 import net.kyori.mammoth.Properties;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.ProjectDependency;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.util.GradleVersion;
 
 /** The Strawberry plugin providing project configuration. */
@@ -78,77 +79,77 @@ public final class StrawberryPlugin implements ProjectPlugin {
 
               // Remove archive classifier from output jar
               shadowJar.getArchiveClassifier().set("");
-              // Copy all final jar to build directory
-              shadowJar.doLast(
-                  task ->
-                      project.copy(
-                          copySpec ->
-                              copySpec
-                                  .from(shadowJar.getArchiveFile())
-                                  .into(project.getRootProject().getProjectDir() + "/build")));
             });
-    // Add shadowJar task as dependency on build task
-    tasks
-        .named("build", DefaultTask.class)
-        .configure(build -> build.dependsOn(tasks.named("shadowJar", ShadowJar.class)));
+    TaskProvider<ShadowJar> shadowJarTask = tasks.named("shadowJar", ShadowJar.class);
+    DirectoryProperty rootBuildDirectory = project.getObjects().directoryProperty();
+    rootBuildDirectory.set(project.file(project.getRootDir() + "/build"));
+    TaskProvider<CopyFileTask> copyShadowJarTask =
+        tasks.register(
+            "copyShadowJarToRootBuild",
+            CopyFileTask.class,
+            copy -> {
+              copy.setDescription("Copies the final shaded jar to the root build directory.");
+              copy.setGroup("build");
+              copy.dependsOn(tasks.named("jar"));
+              copy.getSourceFile().set(shadowJarTask.flatMap(ShadowJar::getArchiveFile));
+              copy.getDestinationFile()
+                  .set(
+                      rootBuildDirectory.file(
+                          shadowJarTask
+                              .flatMap(ShadowJar::getArchiveFile)
+                              .map(file -> file.getAsFile().getName())));
+            });
+    // Add the final jar copy task as dependency on build task
+    tasks.named("build", DefaultTask.class).configure(build -> build.dependsOn(copyShadowJarTask));
     // Add shadowJar task as dependency on other projects shadowJar task
-    tasks
-        .named("shadowJar", ShadowJar.class)
-        .configure(
-            shadowJar ->
-                project
-                    .getConfigurations()
-                    .forEach(
-                        configuration ->
-                            configuration
-                                .getDependencies()
-                                .forEach(
-                                    dependency -> {
-                                      if (dependency instanceof ProjectDependency) {
-                                        Project dependentProject =
-                                            ((ProjectDependency) dependency).getDependencyProject();
-                                        ShadowJar shadowJarTask =
-                                            dependentProject
-                                                .getTasks()
-                                                .named("shadowJar", ShadowJar.class)
-                                                .getOrNull();
-                                        if (shadowJarTask != null) {
-                                          project
-                                              .getTasks()
-                                              .getByName("shadowJar")
-                                              .dependsOn(shadowJarTask);
-                                        }
-                                      }
-                                    })));
+    shadowJarTask.configure(
+        shadowJar ->
+            project
+                .getConfigurations()
+                .forEach(
+                    configuration ->
+                        configuration
+                            .getDependencies()
+                            .forEach(
+                                dependency -> {
+                                  if (dependency instanceof ProjectDependency) {
+                                    String dependentProjectPath =
+                                        ((ProjectDependency) dependency).getPath();
+                                    String dependentShadowJarPath =
+                                        dependentProjectPath.equals(":")
+                                            ? ":shadowJar"
+                                            : dependentProjectPath + ":shadowJar";
+                                    shadowJar.dependsOn(dependentShadowJarPath);
+                                  }
+                                })));
 
     // Create minecraft generate plugin description task
-    Task generatePluginDescriptionTask =
-        tasks
-            .register(
-                "minecraftGeneratePluginDescription",
-                GeneratePluginDescriptionTask.class,
-                task -> {
-                  String name = "minecraft-plugin-description";
-                  task.setDescription(
-                      "Generate the plugin description based on user defined strawberry configuration.");
-                  task.setGroup(name);
-                  task.setOutputDirectory(
+    TaskProvider<GeneratePluginDescriptionTask> generatePluginDescriptionTask =
+        tasks.register(
+            "minecraftGeneratePluginDescription",
+            GeneratePluginDescriptionTask.class,
+            task -> {
+              String name = "minecraft-plugin-description";
+              task.setDescription(
+                  "Generate the plugin description based on user defined strawberry configuration.");
+              task.setGroup(name);
+              task.getOutputDirectory()
+                  .set(
                       project
                           .getLayout()
                           .getBuildDirectory()
                           .dir("generated/" + Strawberry.EXTENSION_NAME + "/" + name));
-
-                  task.doFirst(
-                      t -> {
-                        task.setGenerators(strawberry);
-                        try {
-                          task.validate();
-                        } catch (InvalidPluginDescriptionException e) {
-                          throw new RuntimeException(e);
-                        }
-                      });
-                })
-            .get();
+            });
+    project.afterEvaluate(
+        ignored ->
+            generatePluginDescriptionTask.configure(
+                task -> {
+                  task.setGenerators(strawberry);
+                  task.getProjectVersion().set(project.getVersion().toString());
+                  if (project.getDescription() != null) {
+                    task.getProjectDescription().set(project.getDescription());
+                  }
+                }));
     // Add generate plugin description task as dependency on build task
     tasks
         .named("build", DefaultTask.class)
