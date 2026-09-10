@@ -23,8 +23,8 @@
  */
 
 object Versions {
-    const val INDRA = "3.1.3"
-    const val GRADLE_PUBLISH = "1.3.1"
+    const val INDRA = "4.1.0"
+    const val GRADLE_PUBLISH = "2.2.0"
     const val SHADOW = "9.6.1"
-    const val JACKSON = "2.18.3"
+    const val JACKSON = "2.22.2"
 }
