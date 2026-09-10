@@ -20,6 +20,14 @@ dependencies {
     implementation("com.gradleup.shadow:shadow-gradle-plugin:${Versions.SHADOW}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${Versions.JACKSON}")
+
+    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 indra {
