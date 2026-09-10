@@ -165,11 +165,11 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
           "Invalid plugin name, should match " + VALID_NAME);
     }
 
-    if (GradlePropertyUtils.isNotEmpty(extension.version())) {
+    if (GradlePropertyUtils.isEmpty(extension.version())) {
       throw new InvalidPluginDescriptionException("Version can't be empty if present");
     }
 
-    if (GradlePropertyUtils.isNotEmpty(extension.description())) {
+    if (GradlePropertyUtils.isEmpty(extension.description())) {
       throw new InvalidPluginDescriptionException("Description can't be empty if present");
     }
   }

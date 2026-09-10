@@ -33,4 +33,8 @@ public final class GradlePropertyUtils {
   public static boolean isNotEmpty(@Nonnull Property<String> property) {
     return property.isPresent() && !property.get().isBlank();
   }
+
+  public static boolean isEmpty(@Nonnull Property<String> property) {
+    return property.isPresent() && property.get().isBlank();
+  }
 }
