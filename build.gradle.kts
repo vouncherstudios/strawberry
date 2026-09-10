@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.vouncherstudios"
-version = "1.0.1"
+version = "2.0.0"
 description = "A gradle plugin to apply common organization build settings."
 
 repositories {
