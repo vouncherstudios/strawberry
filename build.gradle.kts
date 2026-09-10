@@ -21,8 +21,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${Versions.JACKSON}")
 
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
