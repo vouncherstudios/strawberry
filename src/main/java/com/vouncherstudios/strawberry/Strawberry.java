@@ -33,7 +33,7 @@ import org.gradle.util.GradleVersion;
 /** Information about the plugin. */
 public final class Strawberry {
   /** The minimum supported Gradle version for the Strawberry suite. */
-  public static final GradleVersion MINIMUM_SUPPORTED = GradleVersion.version("7.5");
+  public static final GradleVersion MINIMUM_SUPPORTED = GradleVersion.version("9.2");
 
   public static final String EXTENSION_NAME = "strawberry";
 

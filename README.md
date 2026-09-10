@@ -17,8 +17,8 @@ within an organization. This plugin aim to enforce consistency, reduce boilerpla
 
 ## Requirements
 
-- Gradle 7.5 or higher
-- Java 11 or higher
+- Gradle 9.2 or higher
+- Java 17 or higher
 
 ## Installation
 
