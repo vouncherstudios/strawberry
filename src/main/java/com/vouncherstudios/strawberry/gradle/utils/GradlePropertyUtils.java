@@ -27,13 +27,26 @@ package com.vouncherstudios.strawberry.gradle.utils;
 import javax.annotation.Nonnull;
 import org.gradle.api.provider.Property;
 
+/** Utilities for inspecting Gradle string properties. */
 public final class GradlePropertyUtils {
   private GradlePropertyUtils() {}
 
+  /**
+   * Checks whether a property is present and contains a non-blank value.
+   *
+   * @param property the property to inspect
+   * @return whether the property contains a non-blank value
+   */
   public static boolean isNotEmpty(@Nonnull Property<String> property) {
     return property.isPresent() && !property.get().isBlank();
   }
 
+  /**
+   * Checks whether a property is present and contains a blank value.
+   *
+   * @param property the property to inspect
+   * @return whether the property contains a blank value
+   */
   public static boolean isEmpty(@Nonnull Property<String> property) {
     return property.isPresent() && property.get().isBlank();
   }

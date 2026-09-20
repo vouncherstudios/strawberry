@@ -49,13 +49,28 @@ public abstract class GeneratePluginDescriptionTask extends DefaultTask {
   // A set to hold the different types of description generators
   private final Set<DescriptionGenerator> generators = new HashSet<>();
 
+  /**
+   * Gets the project version used as the default plugin version.
+   *
+   * @return the project version property
+   */
   @Input
   public abstract Property<String> getProjectVersion();
 
+  /**
+   * Gets the project description used as the default plugin description.
+   *
+   * @return the project description property
+   */
   @Input
   @Optional
   public abstract Property<String> getProjectDescription();
 
+  /**
+   * Gets the directory where plugin descriptions are generated.
+   *
+   * @return the output directory property
+   */
   @OutputDirectory
   public abstract DirectoryProperty getOutputDirectory();
 

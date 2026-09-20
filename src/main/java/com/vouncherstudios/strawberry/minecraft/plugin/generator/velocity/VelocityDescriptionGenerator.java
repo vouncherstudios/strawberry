@@ -52,6 +52,11 @@ public final class VelocityDescriptionGenerator implements DescriptionGenerator 
 
   private final StrawberryExtension strawberry;
 
+  /**
+   * Creates a Velocity plugin description generator.
+   *
+   * @param strawberry the Strawberry extension containing the generator configuration
+   */
   public VelocityDescriptionGenerator(@Nonnull StrawberryExtension strawberry) {
     this.strawberry = strawberry;
   }

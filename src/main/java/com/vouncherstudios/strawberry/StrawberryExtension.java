@@ -67,8 +67,18 @@ public interface StrawberryExtension {
     relocations().add(new Relocation(pattern, destination, configure));
   }
 
+  /**
+   * Gets the Minecraft configuration extension.
+   *
+   * @return the Minecraft configuration extension
+   */
   @Nonnull
   MinecraftExtension minecraft();
 
+  /**
+   * Configures the Minecraft extension.
+   *
+   * @param action the configuration action
+   */
   void minecraft(@Nonnull Action<MinecraftExtension> action);
 }

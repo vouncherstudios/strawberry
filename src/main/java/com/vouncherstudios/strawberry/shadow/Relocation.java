@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.gradle.api.Action;
 
+/** A package relocation applied to the shaded artifact. */
 public final class Relocation {
   private final String pattern;
   private final String destination;
@@ -83,8 +84,14 @@ public final class Relocation {
 
   @Override
   public boolean equals(@Nullable Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
     Relocation that = (Relocation) o;
     return Objects.equals(this.pattern, that.pattern)
         && Objects.equals(this.destination, that.destination);

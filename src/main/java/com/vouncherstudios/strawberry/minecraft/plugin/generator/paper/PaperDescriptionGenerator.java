@@ -56,6 +56,11 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
           .build();
   private final StrawberryExtension strawberry;
 
+  /**
+   * Creates a Paper plugin description generator.
+   *
+   * @param strawberry the Strawberry extension containing the generator configuration
+   */
   public PaperDescriptionGenerator(@Nonnull StrawberryExtension strawberry) {
     this.strawberry = strawberry;
   }

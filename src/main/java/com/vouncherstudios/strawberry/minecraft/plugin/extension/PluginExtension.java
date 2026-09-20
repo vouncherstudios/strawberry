@@ -32,13 +32,33 @@ import org.gradle.api.Action;
 /** A minecraft plugin description configurable interface. */
 public interface PluginExtension {
 
+  /**
+   * Gets the Velocity plugin description extension.
+   *
+   * @return the Velocity plugin description extension
+   */
   @Nonnull
   VelocityExtension velocity();
 
+  /**
+   * Configures the Velocity plugin description extension.
+   *
+   * @param action the configuration action
+   */
   void velocity(@Nonnull Action<VelocityExtension> action);
 
+  /**
+   * Gets the Paper plugin description extension.
+   *
+   * @return the Paper plugin description extension
+   */
   @Nonnull
   PaperExtension paper();
 
+  /**
+   * Configures the Paper plugin description extension.
+   *
+   * @param action the configuration action
+   */
   void paper(@Nonnull Action<PaperExtension> action);
 }

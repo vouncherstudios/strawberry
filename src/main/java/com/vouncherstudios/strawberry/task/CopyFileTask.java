@@ -41,13 +41,28 @@ import org.gradle.api.tasks.TaskAction;
 @CacheableTask
 public abstract class CopyFileTask extends DefaultTask {
 
+  /**
+   * Gets the file to copy.
+   *
+   * @return the source file property
+   */
   @InputFile
   @PathSensitive(PathSensitivity.NONE)
   public abstract RegularFileProperty getSourceFile();
 
+  /**
+   * Gets the destination of the copied file.
+   *
+   * @return the destination file property
+   */
   @OutputFile
   public abstract RegularFileProperty getDestinationFile();
 
+  /**
+   * Copies the source file to the configured destination.
+   *
+   * @throws IOException if the source cannot be copied
+   */
   @TaskAction
   public void copy() throws IOException {
     Path source = getSourceFile().get().getAsFile().toPath();

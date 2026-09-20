@@ -130,8 +130,7 @@ public final class StrawberryPlugin implements ProjectPlugin {
             GeneratePluginDescriptionTask.class,
             task -> {
               String name = "minecraft-plugin-description";
-              task.setDescription(
-                  "Generate the plugin description based on user defined strawberry configuration.");
+              task.setDescription("Generates plugin descriptions from Strawberry configuration.");
               task.setGroup(name);
               task.getOutputDirectory()
                   .set(

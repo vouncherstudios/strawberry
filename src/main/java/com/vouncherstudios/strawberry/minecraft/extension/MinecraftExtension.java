@@ -31,8 +31,18 @@ import org.gradle.api.Action;
 /** A minecraft configurable interface. */
 public interface MinecraftExtension {
 
+  /**
+   * Gets the Minecraft plugin description extension.
+   *
+   * @return the plugin description extension
+   */
   @Nonnull
   PluginExtension plugin();
 
+  /**
+   * Configures the Minecraft plugin description extension.
+   *
+   * @param action the configuration action
+   */
   void plugin(@Nonnull Action<PluginExtension> action);
 }

@@ -33,6 +33,12 @@ public final class Dependency {
   private final String id;
   private final boolean optional;
 
+  /**
+   * Creates a plugin dependency.
+   *
+   * @param id the unique identifier of the dependency
+   * @param optional whether the dependency is optional
+   */
   public Dependency(@Nonnull String id, boolean optional) {
     this.id = id;
     this.optional = optional;
@@ -59,8 +65,14 @@ public final class Dependency {
 
   @Override
   public boolean equals(@Nullable Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
     Dependency that = (Dependency) o;
     return Objects.equals(this.id, that.id);
   }

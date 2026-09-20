@@ -64,8 +64,20 @@ public enum DescriptionGeneratorType {
     }
   };
 
+  /**
+   * Creates a description generator for the supplied extension.
+   *
+   * @param extension the Strawberry extension
+   * @return the description generator
+   */
   public abstract DescriptionGenerator getGenerator(@Nonnull StrawberryExtension extension);
 
+  /**
+   * Checks whether the required properties for this generator are configured.
+   *
+   * @param extension the Strawberry extension
+   * @return whether this generator is available
+   */
   public abstract boolean isAvailable(@Nonnull StrawberryExtension extension);
 
   /**
