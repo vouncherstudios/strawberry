@@ -1,6 +1,6 @@
 # Strawberry
 
-Strawberry is a gradle plugin designed to streamline and apply common build settings across projects
+Strawberry is a Gradle plugin designed to streamline and apply common build settings across projects
 within an organization. This plugin aim to enforce consistency, reduce boilerplate, and automate routine tasks.
 
 ## Features
