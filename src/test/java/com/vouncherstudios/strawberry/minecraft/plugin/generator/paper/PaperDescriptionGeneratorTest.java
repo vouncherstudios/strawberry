@@ -64,6 +64,11 @@ final class PaperDescriptionGeneratorTest {
   }
 
   @Test
+  void rejectsNullExtension() {
+    assertThrows(NullPointerException.class, () -> new PaperDescriptionGenerator(null));
+  }
+
+  @Test
   void generatesConfiguredPluginYaml() throws Exception {
     this.extension.version("1.0.0");
     this.extension.description("Configured description");

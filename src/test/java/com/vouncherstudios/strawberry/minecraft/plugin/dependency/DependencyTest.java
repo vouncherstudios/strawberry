@@ -22,30 +22,16 @@
  * SOFTWARE.
  */
 
-package com.vouncherstudios.strawberry.shadow;
+package com.vouncherstudios.strawberry.minecraft.plugin.dependency;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-final class RelocationTest {
+final class DependencyTest {
 
   @Test
-  void rejectsNullPatternAndDestination() {
-    assertThrows(NullPointerException.class, () -> new Relocation(null, "internal.example", null));
-    assertThrows(NullPointerException.class, () -> new Relocation("com.example", null, null));
-  }
-
-  @Test
-  void equalityDependsOnPatternAndDestinationRatherThanConfiguration() {
-    Relocation first = new Relocation("com.example", "shaded.example", relocator -> {});
-    Relocation sameMapping = new Relocation("com.example", "shaded.example", null);
-    Relocation otherDestination = new Relocation("com.example", "other.example", null);
-
-    assertEquals(first, sameMapping);
-    assertEquals(first.hashCode(), sameMapping.hashCode());
-    assertNotEquals(first, otherDestination);
+  void rejectsNullId() {
+    assertThrows(NullPointerException.class, () -> new Dependency(null, false));
   }
 }

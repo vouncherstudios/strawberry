@@ -40,7 +40,7 @@ public final class Dependency {
    * @param optional whether the dependency is optional
    */
   public Dependency(@Nonnull String id, boolean optional) {
-    this.id = id;
+    this.id = Objects.requireNonNull(id, "id");
     this.optional = optional;
   }
 

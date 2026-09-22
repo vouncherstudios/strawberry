@@ -66,6 +66,11 @@ final class VelocityDescriptionGeneratorTest {
   }
 
   @Test
+  void rejectsNullExtension() {
+    assertThrows(NullPointerException.class, () -> new VelocityDescriptionGenerator(null));
+  }
+
+  @Test
   void generatesConfiguredVelocityDescriptor() throws Exception {
     this.extension.version("2.0.0");
     this.extension.description("Configured description");

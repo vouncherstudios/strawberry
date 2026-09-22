@@ -36,6 +36,7 @@ import com.vouncherstudios.strawberry.minecraft.plugin.exception.InvalidPluginDe
 import com.vouncherstudios.strawberry.minecraft.plugin.extension.paper.PaperExtension;
 import com.vouncherstudios.strawberry.minecraft.plugin.generator.DescriptionGenerator;
 import java.io.File;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
@@ -62,7 +63,7 @@ public final class PaperDescriptionGenerator implements DescriptionGenerator {
    * @param strawberry the Strawberry extension containing the generator configuration
    */
   public PaperDescriptionGenerator(@Nonnull StrawberryExtension strawberry) {
-    this.strawberry = strawberry;
+    this.strawberry = Objects.requireNonNull(strawberry, "strawberry");
   }
 
   @Override

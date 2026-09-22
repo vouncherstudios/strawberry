@@ -47,8 +47,8 @@ public final class Relocation {
       @Nonnull String pattern,
       @Nonnull String destination,
       @Nullable Action<SimpleRelocator> configuration) {
-    this.pattern = pattern;
-    this.destination = destination;
+    this.pattern = Objects.requireNonNull(pattern, "pattern");
+    this.destination = Objects.requireNonNull(destination, "destination");
     this.configuration = configuration;
   }
 
