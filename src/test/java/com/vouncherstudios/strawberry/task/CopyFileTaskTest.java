@@ -38,7 +38,7 @@ final class CopyFileTaskTest {
   @TempDir Path projectDirectory;
 
   @Test
-  void createsParentDirectoriesAndCopiesTheSourceFile() throws Exception {
+  void copiesSourceFileAndCreatesParentDirectories() throws Exception {
     Project project =
         ProjectBuilder.builder().withProjectDir(this.projectDirectory.toFile()).build();
     CopyFileTask task = project.getTasks().register("copyFile", CopyFileTask.class).get();
@@ -54,7 +54,7 @@ final class CopyFileTaskTest {
   }
 
   @Test
-  void replacesAnExistingDestinationFile() throws Exception {
+  void replacesExistingDestinationFile() throws Exception {
     Project project =
         ProjectBuilder.builder().withProjectDir(this.projectDirectory.toFile()).build();
     CopyFileTask task = project.getTasks().register("copyFile", CopyFileTask.class).get();

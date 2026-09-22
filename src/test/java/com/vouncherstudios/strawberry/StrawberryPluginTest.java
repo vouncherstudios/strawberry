@@ -39,7 +39,7 @@ final class StrawberryPluginTest {
   @TempDir Path projectDirectory;
 
   @Test
-  void appliesExpectedConfigurationAndTaskWiring() throws Exception {
+  void configuresExtensionAndBuildTaskWiring() throws Exception {
     Files.writeString(
         this.projectDirectory.resolve("settings.gradle"), "rootProject.name = 'test'\n");
     Files.writeString(
@@ -80,7 +80,7 @@ final class StrawberryPluginTest {
   }
 
   @Test
-  void exposesDeclaredMinimumGradleVersion() {
+  void returnsMinimumSupportedGradleVersion() {
     assertEquals(Strawberry.MINIMUM_SUPPORTED, new StrawberryPlugin().minimumGradleVersion());
   }
 }

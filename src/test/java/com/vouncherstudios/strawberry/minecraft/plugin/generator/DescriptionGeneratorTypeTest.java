@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 final class DescriptionGeneratorTypeTest {
 
   @Test
-  void createsOnlyGeneratorsWithAllRequiredProperties() {
+  void returnsOnlyAvailableGenerators() {
     Project project = ProjectBuilder.builder().build();
     StrawberryExtension strawberry = Strawberry.extension(project.getExtensions());
 

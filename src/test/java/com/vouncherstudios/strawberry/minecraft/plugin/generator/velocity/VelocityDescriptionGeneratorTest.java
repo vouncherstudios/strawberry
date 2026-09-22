@@ -66,13 +66,13 @@ final class VelocityDescriptionGeneratorTest {
   }
 
   @Test
-  void rejectsNullExtension() {
+  void rejectsNullStrawberryExtension() {
     assertThrows(NullPointerException.class, () -> new VelocityDescriptionGenerator(null));
   }
 
   @Test
-  void generatesConfiguredVelocityDescriptor() throws Exception {
-    this.extension.version("2.0.0");
+  void generatesConfiguredPluginDescription() throws Exception {
+    this.extension.version("1.0.0");
     this.extension.description("Configured description");
     this.extension.authors("Alice", "Bob");
     this.extension.addDependency("required-plugin");
@@ -86,7 +86,7 @@ final class VelocityDescriptionGeneratorTest {
     assertEquals("example-plugin", result.path("id").asText());
     assertEquals("Example Plugin", result.path("name").asText());
     assertEquals("com.example.ExamplePlugin", result.path("main").asText());
-    assertEquals("2.0.0", result.path("version").asText());
+    assertEquals("1.0.0", result.path("version").asText());
     assertEquals("Configured description", result.path("description").asText());
     assertEquals(2, result.path("authors").size());
     assertEquals("required-plugin", result.path("dependencies").get(0).path("id").asText());
@@ -97,25 +97,32 @@ final class VelocityDescriptionGeneratorTest {
 
   @Test
   void acceptsNonBlankOptionalOverrides() {
-    this.extension.version("2.0.0");
+    this.extension.version("1.0.0");
     this.extension.description("Configured description");
 
     assertDoesNotThrow(this.generator::validate);
   }
 
   @Test
-  void rejectsBlankOptionalOverrides() {
-    this.extension.description("  ");
-
+  void rejectsBlankVersionOverride() {
+    this.extension.version("  ");
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
   }
 
   @Test
-  void rejectsInvalidIdAndReservedMainNamespace() {
+  void rejectsBlankDescriptionOverride() {
+    this.extension.description("  ");
+    assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
+  }
+
+  @Test
+  void rejectsInvalidPluginId() {
     this.extension.id("Invalid ID");
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
+  }
 
-    this.extension.id("valid-id");
+  @Test
+  void rejectsReservedMainNamespace() {
     this.extension.main("net.minecraft.ExamplePlugin");
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
   }

@@ -64,12 +64,12 @@ final class PaperDescriptionGeneratorTest {
   }
 
   @Test
-  void rejectsNullExtension() {
+  void rejectsNullStrawberryExtension() {
     assertThrows(NullPointerException.class, () -> new PaperDescriptionGenerator(null));
   }
 
   @Test
-  void generatesConfiguredPluginYaml() throws Exception {
+  void generatesConfiguredPluginDescription() throws Exception {
     this.extension.version("1.0.0");
     this.extension.description("Configured description");
     this.extension.load(LoadOrder.STARTUP);
@@ -96,9 +96,7 @@ final class PaperDescriptionGeneratorTest {
   }
 
   @Test
-  void usesProjectDefaultsAndSingularAuthorKey() throws Exception {
-    this.extension.authors("Alice");
-
+  void usesProjectVersionAndDescriptionByDefault() throws Exception {
     this.generator.generate(
         "1.2.3", "Project description", this.project.getLayout().getProjectDirectory());
 
@@ -106,6 +104,17 @@ final class PaperDescriptionGeneratorTest {
         MAPPER.readTree(Files.readString(this.projectDirectory.resolve("plugin.yml")));
     assertEquals("1.2.3", result.path("version").asText());
     assertEquals("Project description", result.path("description").asText());
+  }
+
+  @Test
+  void usesSingularAuthorKeyForOneAuthor() throws Exception {
+    this.extension.authors("Alice");
+
+    this.generator.generate(
+        "1.2.3", "Project description", this.project.getLayout().getProjectDirectory());
+
+    JsonNode result =
+        MAPPER.readTree(Files.readString(this.projectDirectory.resolve("plugin.yml")));
     assertEquals("Alice", result.path("author").asText());
     assertFalse(result.has("authors"));
   }
@@ -119,18 +128,25 @@ final class PaperDescriptionGeneratorTest {
   }
 
   @Test
-  void rejectsBlankOptionalOverrides() {
+  void rejectsBlankVersionOverride() {
     this.extension.version("  ");
-
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
   }
 
   @Test
-  void rejectsInvalidNameAndReservedMainNamespace() {
-    this.extension.name("invalid/name");
+  void rejectsBlankDescriptionOverride() {
+    this.extension.description("  ");
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
+  }
 
-    this.extension.name("Valid Name");
+  @Test
+  void rejectsInvalidPluginName() {
+    this.extension.name("Invalid/name");
+    assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
+  }
+
+  @Test
+  void rejectsReservedMainNamespace() {
     this.extension.main("org.bukkit.ExamplePlugin");
     assertThrows(InvalidPluginDescriptionException.class, this.generator::validate);
   }
