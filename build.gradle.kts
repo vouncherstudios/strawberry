@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly("com.google.code.findbugs:jsr305:${Versions.JSR305}")
     implementation("net.kyori:indra-common:${Versions.INDRA}")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:${Versions.SHADOW}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}")

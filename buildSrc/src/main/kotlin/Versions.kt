@@ -1,4 +1,5 @@
 object Versions {
+    const val JSR305 = "3.0.2"
     const val INDRA = "4.1.0"
     const val CHECKSTYLE = "12.3.1"
     const val GRADLE_PUBLISH = "2.2.1"
